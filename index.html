@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promodo Timer</title>
+    <style>
+
+      .timer {
+        font-size: 350px;
+        margin-bottom: 20px;
+      }
+
+      body {
+        overflow-y: hidden; /* Hide vertical scrollbar */
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+      }
+
+      .button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px; /* Radius of 5px for rounded corners */
+        background-color: rgb(223, 223, 223); /* Green background color */
+        color: black; /* White text color */
+        border: none; /* No border */
+      }
+
+      .text {
+        font-size: 150px;
+        color: rgb(223, 223, 223); 
+      }
+
+      .working {
+        color: rgb(223, 223, 223); 
+      }
+
+      .break {
+        color: rgb(223, 223, 223);
+      }
+
+      .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: auto;
+      } 
+
+      video {
+        width: 100%;
+        height: auto;
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        /* background: linear-gradient(135deg, rgba(173, 218, 131, 0.5) 0%, rgba(233, 111, 111, 0.5) 100%); */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      
+      
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <video autoplay muted loop id="myVideo">
+        <source src="test1.mp4" type="video/mp4" />
+      </video>
+      <div class="overlay">
+        <span class="text" id="text">Text</span>
+        <div class="timer" id="timer">25:00</div>
+        <div>
+          <button class="button" onclick="startTimer()">Start</button>
+        </div>
+    </div>
+    </div>
+    
+
+    
+    
+
+    <script>
+      var timer;
+      var minutes = 25;
+      var seconds = 0;
+      var mode = "Learning";
+      document.getElementById("text").innerHTML = "Learning";
+
+      function startTimer() {
+        timer = setInterval(function () {
+          if (seconds == 0) {
+            if (minutes == 0) {
+              clearInterval(timer);
+              if (mode === "Learning") {
+                mode = "break";
+                document.getElementById("text").innerHTML = "Breaking";
+                minutes = 5;
+                startTimer()
+                // document.body.style.backgroundColor = "red"; // Change background color to indicate break
+              } else {
+                mode = "Learning";
+                document.getElementById("text").innerHTML = "Learning";
+
+                minutes = 25;
+                startTimer()
+                document.body.style.backgroundColor = "#f0f0f0"; // Reset background color
+              }
+            } else {
+              minutes--;
+              seconds = 59;
+            }
+          } else {
+            seconds--;
+          }
+
+          updateTimer();
+        }, 1000);
+      }
+
+      function updateTimer() {
+        var timerDisplay = document.getElementById("timer");
+        timerDisplay.innerHTML =
+          (minutes < 10 ? "0" : "") +
+          minutes +
+          ":" +
+          (seconds < 10 ? "0" : "") +
+          seconds;
+        timerDisplay.className =
+          mode === "Learning" ? "timer working" : "timer break";
+      }
+
+      updateTimer(); // Initial display
+    </script>
+  </body>
+</html>
